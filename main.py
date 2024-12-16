@@ -44,12 +44,6 @@ class AudioPlayer(tk.Tk):
     def stop(self):
         pygame.mixer.music.stop()
     
-    def next_track(self):
-        pass  # Добавить логику переключения треков
-    
-    def previous_track(self):
-        pass  # Добавить логику переключения треков
-    
     def set_volume(self, value):
         volume = float(value) / 100
         pygame.mixer.music.set_volume(volume)
@@ -64,18 +58,12 @@ class AudioPlayer(tk.Tk):
         stop_button = tk.Button(control_frame, text="Stop", command=self.stop)
         stop_button.grid(row=0, column=1, padx=10)
         
-        next_button = tk.Button(control_frame, text="Next", command=self.next_track)
-        next_button.grid(row=0, column=2, padx=10)
-        
-        prev_button = tk.Button(control_frame, text="Previous", command=self.previous_track)
-        prev_button.grid(row=0, column=3, padx=10)
-        
         volume_label = tk.Label(self, text="Volume:")
         volume_label.pack(pady=(30, 0))
         
         volume_scale = tk.Scale(self, from_=0, to=100, orient=tk.HORIZONTAL, length=300, command=self.set_volume)
         volume_scale.pack(pady=10)
-        volume_scale.set(50)  # Установим начальную громкость 50%
+        volume_scale.set(20)  # Установим начальную громкость 20%
 
 if __name__ == "__main__":
     app = AudioPlayer()
