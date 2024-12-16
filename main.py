@@ -1,5 +1,6 @@
+import os
 import tkinter as tk
-from tkinter import filedialog, messagebox
+from tkinter import messagebox
 import pygame
 from pygame.locals import *
 
@@ -19,25 +20,20 @@ class AudioPlayer(tk.Tk):
         # Переменная для хранения пути к файлу
         self.file_path = None
         
+        # Автоматически находим аудиофайл в текущей папке
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        audio_files = [f for f in os.listdir(current_dir) if f.endswith('.mp3') or f.endswith('.wav')]
+        
+        if len(audio_files) > 0:
+            self.file_path = os.path.join(current_dir, audio_files[0])  # Берем первый найденный аудиофайл
+            pygame.mixer.music.load(self.file_path)
+            pygame.mixer.music.play()  # Начинаем автоматическое воспроизведение
+            messagebox.showinfo("Success", f"Loaded {self.file_path}")
+        else:
+            messagebox.showwarning("Warning", "No audio files found in the same directory.")
+        
         # Создаем элементы интерфейса
-        self.create_menu()
         self.create_controls()
-    
-    def create_menu(self):
-        menu_bar = tk.Menu(self)
-        file_menu = tk.Menu(menu_bar, tearoff=0)
-        file_menu.add_command(label="Open File...", command=self.open_file)
-        menu_bar.add_cascade(label="File", menu=file_menu)
-        self.config(menu=menu_bar)
-    
-    def open_file(self):
-        try:
-            self.file_path = filedialog.askopenfilename(filetypes=[('Audio files', '*.mp3 *.wav')])
-            if self.file_path:
-                pygame.mixer.music.load(self.file_path)
-                messagebox.showinfo("Success", f"Loaded {self.file_path}")
-        except Exception as e:
-            messagebox.showerror("Error", f"Something went wrong: {e}")
     
     def play_pause(self):
         if pygame.mixer.music.get_busy():
